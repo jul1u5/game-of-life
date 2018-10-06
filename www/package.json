@@ -4,7 +4,8 @@
   "main": "src/index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
-    "start": "webpack-dev-server"
+    "start": "webpack-dev-server",
+    "deploy": "npm run build && cd .. && git subtree push --prefix www/dist origin gh-pages"
   },
   "keywords": [
     "webassembly",
