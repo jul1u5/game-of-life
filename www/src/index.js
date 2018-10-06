@@ -80,7 +80,10 @@ resetButton.addEventListener('click', () => {
 
 // Blank canvas
 const blankButton = document.getElementById('blank');
-blankButton.addEventListener('click', () => universe.clear_cells());
+blankButton.addEventListener('click', () => {
+  universe.clear_cells();
+  drawCells();
+});
 
 const drawGrid = () => {
   ctx.beginPath();
@@ -159,7 +162,7 @@ canvas.addEventListener('click', event => {
     default:
       universe.toggle_cell(row, col);
   }
-  
+
   drawCells();
 });
 
