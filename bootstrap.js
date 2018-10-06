@@ -52,14 +52,14 @@
 /******/ 	function promiseResolve() { return Promise.resolve(); }
 /******/
 /******/ 	var wasmImportObjects = {
-/******/ 		"../pkg/wasm_game_of_life_bg.wasm": function() {
+/******/ 		"../pkg/game_of_life_bg.wasm": function() {
 /******/ 			return {
-/******/ 				"./wasm_game_of_life": {
+/******/ 				"./game_of_life": {
 /******/ 					"__wbg_random_86efc8986c8a8805": function() {
-/******/ 						return installedModules["../pkg/wasm_game_of_life.js"].exports["__wbg_random_86efc8986c8a8805"]();
+/******/ 						return installedModules["../pkg/game_of_life.js"].exports["__wbg_random_86efc8986c8a8805"]();
 /******/ 					},
 /******/ 					"__wbindgen_throw": function(p0i32,p1i32) {
-/******/ 						return installedModules["../pkg/wasm_game_of_life.js"].exports["__wbindgen_throw"](p0i32,p1i32);
+/******/ 						return installedModules["../pkg/game_of_life.js"].exports["__wbindgen_throw"](p0i32,p1i32);
 /******/ 					}
 /******/ 				}
 /******/ 			};
@@ -150,7 +150,7 @@
 /******/
 /******/ 		// Fetch + compile chunk loading for webassembly
 /******/
-/******/ 		var wasmModules = {"0":["../pkg/wasm_game_of_life_bg.wasm"]}[chunkId] || [];
+/******/ 		var wasmModules = {"0":["../pkg/game_of_life_bg.wasm"]}[chunkId] || [];
 /******/
 /******/ 		wasmModules.forEach(function(wasmModuleId) {
 /******/ 			var installedWasmModuleData = installedWasmModules[wasmModuleId];
@@ -160,7 +160,7 @@
 /******/ 				promises.push(installedWasmModuleData);
 /******/ 			else {
 /******/ 				var importObject = wasmImportObjects[wasmModuleId]();
-/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/wasm_game_of_life_bg.wasm":"00a0014dcfb908fe1f0f"}[wasmModuleId] + ".module.wasm");
+/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/game_of_life_bg.wasm":"98640f76192df8a8efb4"}[wasmModuleId] + ".module.wasm");
 /******/ 				var promise;
 /******/ 				if(importObject instanceof Promise && typeof WebAssembly.compileStreaming === 'function') {
 /******/ 					promise = Promise.all([WebAssembly.compileStreaming(req), importObject]).then(function(items) {
