@@ -43,7 +43,6 @@ const renderLoop = () => {
 
   universe.tick();
 
-  // drawGrid();
   drawCells();
 };
 
@@ -51,12 +50,12 @@ const renderLoop = () => {
 const playPauseButton = document.getElementById('play-pause');
 
 const play = () => {
-  playPauseButton.textContent = '⏸';
+  playPauseButton.textContent = playPauseButton.dataset.pause;
   renderLoop();
 };
 
 const pause = () => {
-  playPauseButton.textContent = '▶️';
+  playPauseButton.textContent = playPauseButton.dataset.play;
   cancelAnimationFrame(animationId);
   animationId = null;
 };
@@ -84,25 +83,6 @@ blankButton.addEventListener('click', () => {
   universe.clear_cells();
   drawCells();
 });
-
-const drawGrid = () => {
-  ctx.beginPath();
-  ctx.strokeStyle = GRID_COLOR;
-
-  // Vertical lines.
-  for (let i = 0; i <= width; i++) {
-    ctx.moveTo(i * (CELL_SIZE + 1) + 1, 0);
-    ctx.lineTo(i * (CELL_SIZE + 1) + 1, (CELL_SIZE + 1) * height + 1);
-  }
-
-  // Horizontal lines.
-  for (let j = 0; j <= height; j++) {
-    ctx.moveTo(0, j * (CELL_SIZE + 1) + 1);
-    ctx.lineTo((CELL_SIZE + 1) * width + 1, j * (CELL_SIZE + 1) + 1);
-  }
-
-  ctx.stroke();
-};
 
 const getIndex = (row, column) => {
   return row * width + column;
