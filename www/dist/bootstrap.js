@@ -55,8 +55,11 @@
 /******/ 		"../pkg/game_of_life_bg.wasm": function() {
 /******/ 			return {
 /******/ 				"./game_of_life": {
-/******/ 					"__wbg_random_86efc8986c8a8805": function() {
-/******/ 						return installedModules["../pkg/game_of_life.js"].exports["__wbg_random_86efc8986c8a8805"]();
+/******/ 					"__wbg_random_2cc0c8d054a5c72a": function() {
+/******/ 						return installedModules["../pkg/game_of_life.js"].exports["__wbg_random_2cc0c8d054a5c72a"]();
+/******/ 					},
+/******/ 					"__wbg_error_cc95a3d302735ca3": function(p0i32,p1i32) {
+/******/ 						return installedModules["../pkg/game_of_life.js"].exports["__wbg_error_cc95a3d302735ca3"](p0i32,p1i32);
 /******/ 					},
 /******/ 					"__wbindgen_throw": function(p0i32,p1i32) {
 /******/ 						return installedModules["../pkg/game_of_life.js"].exports["__wbindgen_throw"](p0i32,p1i32);
@@ -112,7 +115,6 @@
 /******/ 				promises.push(installedChunkData[2] = promise);
 /******/
 /******/ 				// start chunk loading
-/******/ 				var head = document.getElementsByTagName('head')[0];
 /******/ 				var script = document.createElement('script');
 /******/ 				var onScriptComplete;
 /******/
@@ -144,7 +146,7 @@
 /******/ 					onScriptComplete({ type: 'timeout', target: script });
 /******/ 				}, 120000);
 /******/ 				script.onerror = script.onload = onScriptComplete;
-/******/ 				head.appendChild(script);
+/******/ 				document.head.appendChild(script);
 /******/ 			}
 /******/ 		}
 /******/
@@ -160,7 +162,7 @@
 /******/ 				promises.push(installedWasmModuleData);
 /******/ 			else {
 /******/ 				var importObject = wasmImportObjects[wasmModuleId]();
-/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/game_of_life_bg.wasm":"98640f76192df8a8efb4"}[wasmModuleId] + ".module.wasm");
+/******/ 				var req = fetch(__webpack_require__.p + "" + {"../pkg/game_of_life_bg.wasm":"f72b70658378b68a7841"}[wasmModuleId] + ".module.wasm");
 /******/ 				var promise;
 /******/ 				if(importObject instanceof Promise && typeof WebAssembly.compileStreaming === 'function') {
 /******/ 					promise = Promise.all([WebAssembly.compileStreaming(req), importObject]).then(function(items) {
