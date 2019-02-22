@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist/",
+    "sourceMap": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "module": "esnext",
+    "target": "es2018",
+    "lib": ["dom", "es2018"],
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+  },
+  "include": [
+    "./www/",
+  ],
+}

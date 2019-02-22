@@ -1,6 +1,10 @@
-/target
-**/*.rs.bk
-Cargo.lock
+dist/
+node_modules/
+
+# Rust
 bin/
 pkg/
+target/
+**/*.rs.bk
 wasm-pack.log
+Cargo.lock

@@ -4,7 +4,6 @@ sudo: false
 matrix:
   include:
 
-  # tests pass
   - rust: nightly
     script:
     - cargo test
