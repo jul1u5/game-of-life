@@ -1,0 +1,27 @@
+{
+  "name": "game-of-life",
+  "version": "0.1.0",
+  "main": "src/index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server",
+    "deploy": "npm run build && git subtree push --prefix dist origin gh-pages"
+  },
+  "keywords": [
+    "webassembly",
+    "wasm",
+    "rust",
+    "webpack"
+  ],
+  "author": "Julius Marozas <marozas.julius@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@wasm-tool/wasm-pack-plugin": "^0.2.3",
+    "copy-webpack-plugin": "^5.0.0",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.3.3333",
+    "webpack": "^4.29.5",
+    "webpack-cli": "^3.2.3",
+    "webpack-dev-server": "^3.2.0"
+  }
+}

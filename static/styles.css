@@ -24,11 +24,6 @@ body {
   display: inline;
 }
 
-#fps {
-  white-space: pre;
-  font-family: monospace;
-}
-
 button {
   background: none;
   border: none;
@@ -36,6 +31,7 @@ button {
   padding: 0;
   cursor: pointer;
   font-size: 18pt;
+  font-family: "EmojiOne Color";
 }
 
 button:focus {

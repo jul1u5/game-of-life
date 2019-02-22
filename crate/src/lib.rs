@@ -3,52 +3,10 @@ extern crate cfg_if;
 extern crate js_sys;
 extern crate wasm_bindgen;
 
-#[wasm_bindgen]
-extern "C" {
-    #[wasm_bindgen(js_namespace = console)]
-    fn log(msg: &str);
-
-    #[wasm_bindgen(js_namespace = console)]
-    fn time(name: &str);
-
-    #[wasm_bindgen(js_namespace = console)]
-    fn timeEnd(name: &str);
-}
-
 mod utils;
-
-use cfg_if::cfg_if;
-use wasm_bindgen::prelude::*;
-
-cfg_if! {
-    // When the `wee_alloc` feature is enabled, use `wee_alloc` as the global
-    // allocator.
-    if #[cfg(feature = "wee_alloc")] {
-        extern crate wee_alloc;
-        #[global_allocator]
-        static ALLOC: wee_alloc::WeeAlloc = wee_alloc::WeeAlloc::INIT;
-    }
-}
 
 use bit_vec::BitVec;
 use wasm_bindgen::prelude::*;
-
-pub struct Timer<'a> {
-    name: &'a str,
-}
-
-impl<'a> Timer<'a> {
-    pub fn new(name: &'a str) -> Timer<'a> {
-        time(name);
-        Timer { name }
-    }
-}
-
-impl<'a> Drop for Timer<'a> {
-    fn drop(&mut self) {
-        timeEnd(self.name);
-    }
-}
 
 #[wasm_bindgen]
 pub struct Universe {
@@ -57,10 +15,9 @@ pub struct Universe {
     cells: BitVec,
 }
 
-/// Public methods, exported to JavaScript.
 #[wasm_bindgen]
 impl Universe {
-    // #[wasm_bindgen(constructor)]
+    #[wasm_bindgen(constructor)]
     pub fn new(width: u32, height: u32) -> Universe {
         utils::set_panic_hook();
         let cells = BitVec::from_fn((width * height) as usize, |_i| js_sys::Math::random() < 0.5);
@@ -126,14 +83,6 @@ impl Universe {
     pub fn clear_cells(&mut self) {
         self.cells = BitVec::from_elem((self.width * self.height) as usize, false);
     }
-
-    pub fn create_glider(&mut self, row: u32, column: u32) {
-        self.create_pattern(GLIDER, row, column);
-    }
-
-    pub fn create_pulsar(&mut self, row: u32, column: u32) {
-        self.create_pattern(PULSAR, row, column);
-    }
 }
 
 impl Universe {
@@ -185,67 +134,23 @@ impl Universe {
         count
     }
 
-    fn create_pattern(&mut self, pattern: Pattern, row: u32, column: u32) {
-        let mut next = self.cells.clone();
+    // fn create_pattern(&mut self, pattern: patterns::Pattern, row: u32, column: u32) {
+    //     let mut next = self.cells.clone();
 
-        let rows = pattern.len() as i32;
-        let cols = pattern[0].len() as i32;
+    //     let rows = pattern.len() as i32;
+    //     let cols = pattern[0].len() as i32;
 
-        for delta_row in -rows / 2..(rows + 1) / 2 {
-            for delta_col in -cols / 2..(cols + 1) / 2 {
-                let current_row =
-                    (row as i32 + delta_row + self.height as i32) as u32 % self.height;
-                let current_col =
-                    (column as i32 + delta_col + self.width as i32) as u32 % self.width;
-                let idx = self.get_index(current_row, current_col);
-                next.set(idx, pattern[delta_row as usize][delta_col as usize]);
-            }
-        }
+    //     for delta_row in -rows / 2..(rows + 1) / 2 {
+    //         for delta_col in -cols / 2..(cols + 1) / 2 {
+    //             let current_row =
+    //                 (row as i32 + delta_row + self.height as i32) as u32 % self.height;
+    //             let current_col =
+    //                 (column as i32 + delta_col + self.width as i32) as u32 % self.width;
+    //             let idx = self.get_index(current_row, current_col);
+    //             next.set(idx, pattern[delta_row as usize][delta_col as usize]);
+    //         }
+    //     }
 
-        self.cells = next;
-    }
+    //     self.cells = next;
+    // }
 }
-
-type Pattern = &'static [&'static [bool]];
-
-static GLIDER: Pattern = &[
-    &[false, true, false],
-    &[false, false, true],
-    &[true, true, true],
-];
-
-static PULSAR: Pattern = &[
-    &[
-        false, true, true, true, false, false, false, true, true, true, false,
-    ],
-    &[
-        true, false, false, false, true, false, true, false, false, false, true,
-    ],
-    &[
-        true, false, false, false, true, false, true, false, false, false, true,
-    ],
-    &[
-        true, false, false, false, true, false, true, false, false, false, true,
-    ],
-    &[
-        false, true, true, true, false, false, false, true, true, true, false,
-    ],
-    &[
-        false, false, false, false, false, false, false, false, false, false, false,
-    ],
-    &[
-        false, true, true, true, false, false, false, true, true, true, false,
-    ],
-    &[
-        true, false, false, false, true, false, true, false, false, false, true,
-    ],
-    &[
-        true, false, false, false, true, false, true, false, false, false, true,
-    ],
-    &[
-        true, false, false, false, true, false, true, false, false, false, true,
-    ],
-    &[
-        false, true, true, true, false, false, false, true, true, true, false,
-    ],
-];
