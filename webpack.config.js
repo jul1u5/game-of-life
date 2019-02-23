@@ -15,16 +15,16 @@ module.exports = {
     rules: [{
         test: /\.tsx?$/,
         use: 'ts-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /\.wasm$/,
-        type: "webassembly/experimental"
-      }
-    ]
+        type: "webassembly/experimental",
+      },
+    ],
   },
   resolve: {
-    extensions: ['.tsx', '.ts', '.js', '.wasm']
+    extensions: ['.tsx', '.ts', '.js', '.wasm'],
   },
   plugins: [
     new CopyWebpackPlugin([
