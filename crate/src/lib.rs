@@ -1,95 +1,47 @@
-extern crate bit_vec;
 extern crate cfg_if;
 extern crate js_sys;
 extern crate wasm_bindgen;
 
+mod quadtree;
 mod utils;
 
-use bit_vec::BitVec;
+use quadtree::*;
 use wasm_bindgen::prelude::*;
 
 #[wasm_bindgen]
 pub struct Universe {
-    width: u32,
-    height: u32,
-    cells: BitVec,
+    cells: QuadTree,
 }
 
 #[wasm_bindgen]
 impl Universe {
     #[wasm_bindgen(constructor)]
-    pub fn new(width: u32, height: u32) -> Universe {
+    pub fn new() -> Universe {
         utils::set_panic_hook();
-        let cells = BitVec::from_fn((width * height) as usize, |_i| js_sys::Math::random() < 0.5);
+        let cells = tree![
+            tree![tree!(false); tree!(true); tree!(false); tree!(false)];
+            tree![tree!(false); tree!(false); tree!(true); tree!(false)];
+            tree![tree!(true); tree!(true); tree!(false); tree!(false)];
+            tree![tree!(true); tree!(false); tree!(false); tree!(false)];
+        ];
 
-        Universe {
-            width,
-            height,
-            cells,
-        }
+        Universe { cells }
     }
 
     pub fn tick(&mut self) {
-        let mut next = self.cells.clone();
-
-        for row in 0..self.height {
-            for col in 0..self.width {
-                let idx = self.get_index(row, col);
-                let cell = self.cells[idx];
-                let live_neighbors = self.live_neighbor_count(row, col);
-
-                let next_cell = match (cell, live_neighbors) {
-                    // Rule 1: Any live cell with fewer than two live neighbours
-                    // dies, as if caused by underpopulation.
-                    (true, x) if x < 2 => false,
-                    // Rule 2: Any live cell with two or three live neighbours
-                    // lives on to the next generation.
-                    (true, 2) | (true, 3) => true,
-                    // Rule 3: Any live cell with more than three live
-                    // neighbours dies, as if by overpopulation.
-                    (true, x) if x > 3 => false,
-                    // Rule 4: Any dead cell with exactly three live neighbours
-                    // becomes a live cell, as if by reproduction.
-                    (false, 3) => true,
-                    // All other cells remain in the same state.
-                    (otherwise, _) => otherwise,
-                };
-
-                next.set(idx, next_cell);
-            }
-        }
-
-        self.cells = next;
+        self.cells = self.cells.tick();
     }
 
-    pub fn width(&self) -> u32 {
-        self.width
-    }
-
-    pub fn height(&self) -> u32 {
-        self.height
-    }
-
-    pub fn cells(&self) -> *const u32 {
-        self.cells.storage().as_ptr()
-    }
-
-    pub fn toggle_cell(&mut self, row: u32, column: u32) {
-        let idx = self.get_index(row, column);
-        let val = self.cells[idx].clone();
-        self.cells.set(idx, !val);
+    pub fn toggle_cell(&mut self, row: i32, column: i32) {
+        self.cells[(row, column)] = !self.cells[(row, column)];
     }
 
     pub fn clear_cells(&mut self) {
-        self.cells = BitVec::from_elem((self.width * self.height) as usize, false);
+        self.cells = QuadTree::Cell(false);
     }
 }
 
 impl Universe {
-    fn get_index(&self, row: u32, column: u32) -> usize {
-        (row * self.width + column) as usize
-    }
-
     fn live_neighbor_count(&self, row: u32, column: u32) -> u8 {
         let mut count = 0;
 
@@ -133,24 +85,4 @@ impl Universe {
 
         count
     }
-
-    // fn create_pattern(&mut self, pattern: patterns::Pattern, row: u32, column: u32) {
-    //     let mut next = self.cells.clone();
-
-    //     let rows = pattern.len() as i32;
-    //     let cols = pattern[0].len() as i32;
-
-    //     for delta_row in -rows / 2..(rows + 1) / 2 {
-    //         for delta_col in -cols / 2..(cols + 1) / 2 {
-    //             let current_row =
-    //                 (row as i32 + delta_row + self.height as i32) as u32 % self.height;
-    //             let current_col =
-    //                 (column as i32 + delta_col + self.width as i32) as u32 % self.width;
-    //             let idx = self.get_index(current_row, current_col);
-    //             next.set(idx, pattern[delta_row as usize][delta_col as usize]);
-    //         }
-    //     }
-
-    //     self.cells = next;
-    // }
 }
